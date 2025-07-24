@@ -3,8 +3,18 @@ import streamlit as st
 import pickle
 import numpy as np
 import pandas as pd
+import os
 
-model = 'RF_diabetes_model.pkl'
+
+model_path = 'RF_diabetes_model.pkl'
+
+# Memuat model yang telah disimpan
+with open(model_path, 'rb') as f:
+    loaded_model = pickle.load(f)
+
+# Jika model disimpan dalam bentuk list/tuple, akses model di index [0]
+# Sesuaikan jika struktur objeknya berbeda
+rf_model = loaded_model
 
 # Menyiapkan title dan deskripsi aplikasi
 st.title("Prediksi Diabetes")
@@ -31,31 +41,26 @@ if st.button('Prediksi'):
         input_data = np.array([[kehamilan, glukosa, tekanan_darah, bmi, umur]])
 
         # Menggunakan model untuk prediksi
-        prediksi = model.predict(input_data)
+        prediksi = rf_model.predict(input_data)
     
     # Menampilkan hasil prediksi
     if prediksi == 1:
         st.markdown("<h2 style='color: red;'>Hasil Prediksi: Berpotensi terkena penyakit Diabetes</h2>", unsafe_allow_html=True)
-        
-        # Saran pola hidup untuk yang berpotensi diabetes
         st.write("""
         **Saran Pola Hidup:**
         1. **Meningkatkan Aktivitas Fisik**: Olahraga rutin seperti berjalan cepat, bersepeda, atau berenang dapat membantu mengatur kadar gula darah.
-        2. **Menerapkan Pola Makan Sehat**: Konsumsi makanan rendah gula, tinggi serat, dan kaya akan nutrisi. Cobalah diet seimbang dengan banyak sayuran, buah-buahan, dan biji-bijian.
-        3. **Mengelola Berat Badan**: Menurunkan berat badan jika Anda memiliki kelebihan berat badan dapat membantu menurunkan risiko diabetes.
-        4. **Memantau Kadar Gula Darah**: Lakukan pemeriksaan rutin untuk memantau kadar gula darah dan berkonsultasi dengan dokter untuk pemantauan lebih lanjut.
-        5. **Mengurangi Stres**: Praktikkan teknik relaksasi seperti meditasi atau yoga untuk mengurangi stres, yang dapat memengaruhi kadar gula darah.
+        2. **Menerapkan Pola Makan Sehat**: Konsumsi makanan rendah gula, tinggi serat, dan kaya akan nutrisi.
+        3. **Mengelola Berat Badan**: Menurunkan berat badan jika memiliki kelebihan berat badan dapat membantu menurunkan risiko diabetes.
+        4. **Memantau Kadar Gula Darah**: Lakukan pemeriksaan rutin dan konsultasi dengan dokter.
+        5. **Mengurangi Stres**: Meditasi atau yoga untuk relaksasi.
         """)
     else:
         st.markdown("<h2 style='color: green;'>Hasil Prediksi: Tidak berpotensi terkena penyakit Diabetes</h2>", unsafe_allow_html=True)
-        
-        # Saran pola hidup untuk yang tidak berpotensi diabetes
         st.write("""
         **Saran Pola Hidup:**
-        1. **Pertahankan Pola Makan Sehat**: Terus konsumsi makanan yang bergizi, rendah gula, dan kaya akan serat.
-        2. **Rutin Berolahraga**: Pertahankan gaya hidup aktif dengan olahraga teratur, seperti berjalan, berlari, atau aktivitas fisik lainnya.
-        3. **Jaga Berat Badan Ideal**: Pastikan untuk menjaga berat badan agar tetap sehat dan terhindar dari risiko penyakit metabolik.
-        4. **Pemeriksaan Rutin**: Lakukan pemeriksaan kesehatan secara rutin untuk memastikan tetap dalam kondisi sehat dan terhindar dari penyakit lain.
-        5. **Hindari Stres**: Kelola stres dengan baik dan praktikkan teknik relaksasi seperti yoga atau meditasi untuk menjaga kesehatan tubuh dan pikiran.
+        1. **Pertahankan Pola Makan Sehat**: Makanan bergizi, rendah gula, dan kaya serat.
+        2. **Rutin Berolahraga**: Jalan, lari, atau aktivitas fisik lain secara teratur.
+        3. **Jaga Berat Badan Ideal**: Hindari risiko penyakit metabolik.
+        4. **Pemeriksaan Rutin**: Cek kesehatan berkala.
+        5. **Hindari Stres**: Kelola stres dengan baik dan tetap rileks.
         """)
-
