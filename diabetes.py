@@ -4,8 +4,7 @@ import pickle
 import numpy as np
 import pandas as pd
 
-with open('RF_diabetes_model.pkl', 'rb') as model_file:
-    model = pickle.load(model_file)
+model = 'RF_diabetes_model.pkl'
 
 # Menyiapkan title dan deskripsi aplikasi
 st.title("Prediksi Diabetes")
